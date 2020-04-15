@@ -1,48 +1,50 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Crud example
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
+<header>
+  <div class="big-circle top-circle-big">
+    <div class="medium-circle inner-circle-medium"></div>
+    <div class="small-circle inner-circle-small"></div>
+    <div class="todo-text">TODO</div>
+  </div>
+</header>
+<ion-content>
+  <div class="list-header">List</div>
   <ion-list>
-    <ion-item>
-      <ion-label floating>Message title :</ion-label>
-      <ion-input type="text" value="" [(ngModel)]="model.title"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Message body :</ion-label>
-      <ion-textarea type="text" row="10" [(ngModel)]="model.text"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <button type="button" (click)="addMessage()" ion-button full>Submit</button>
-    </ion-item>
-  </ion-list>
-
-  <ion-card>
-    <ion-card-header>
-      Swipe item to the left to delete or edit
-    </ion-card-header>
-  </ion-card>
-  <ion-list>
-    <ion-item-sliding *ngFor="let message of messages">
-      <ion-item>
-        <h3>title: {{message.title}}</h3>
-        <p>body: {{message.text}}</p>
+    <ion-item-sliding *ngFor="let message of messages; trackBy: trackByFn">
+      <ion-item (click)="toggleCheck(message)">
+        <p [class.checked]="message.checked">{{message.text}}</p>
       </ion-item>
       <ion-item-options>
         <button ion-button color="danger" (click)="deleteMessage(message.id)">
-          <ion-icon name="ios-trash"></ion-icon>
+          <ion-icon name="trash-outline"></ion-icon>
           delete
         </button>
         <button ion-button color="success" (click)="updateMessage(message)">
-          <ion-icon name="ios-create"></ion-icon>
+          <ion-icon name="create-outline"></ion-icon>
           edit
         </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
+  <ion-fab>
+    <ion-fab-button (click)="addItem()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <div [ngClass]="showForm? 'form-open': 'form-closed'" class="form">
+    <ion-list>
+      <ion-item class="no-border">
+        <div class="new-task">
+          <span>ADD NEW TASK</span>
+        </div>
+      </ion-item>
+      <ion-item class="no-border">
+        <div class="placeholder">
+          e.g. Buy groceries 
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="model.text"></ion-input>
+      </ion-item>
+        <ion-button (click)="addMessage()" size="large" expand="block">Save</ion-button>
+    </ion-list>
+  </div>
 </ion-content>

@@ -12,6 +12,7 @@ export class HomePage {
   private db: AngularFirestore;
   model: any = {};
   isEditing: boolean = false;
+  showForm: boolean;
 
   constructor(private fireStore: AngularFirestore) {
     this.db = this.fireStore;
@@ -33,23 +34,35 @@ export class HomePage {
     });
   }
 
-  addMessage() {
+  toggleCheck(item): void {
+    this.isEditing = true;
+    item.checked = !item.checked;
+    this.model = item;
+    this.addMessage();
+  }
+
+  addMessage(): void {
+    if (!this.model.text) {
+      return;
+    }
     if (!this.isEditing) {
       this.addDocument("messages", this.model).then(() => {
         this.loadData();//refresh view
       });
     } else {
-      this.updateDocument("messages", this.model.$key, this.model).then(() => {
+      this.updateDocument("messages", this.model.id, this.model).then(() => {
         this.loadData();//refresh view
       });
     }
     this.isEditing = false;
     //clear form
-    this.model.title = '';
+    this.model.checked = false;
     this.model.text = '';
+    this.showForm = false;
   }
 
   updateMessage(obj) {
+    this.showForm = true;
     this.model = obj;
     this.isEditing = true;
   }
@@ -62,8 +75,13 @@ export class HomePage {
   }
 
 
+  addItem(): void {
+    this.showForm = !this.showForm;
+  }
 
-
+  trackByFn(index: number, item: any): number {
+    return index; // or item.id
+  }
 
   //CRUD operation methods------------------------------------------------------------------------------------------
 
