@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
+import { FirestoreService } from '../firestore.service';
+
+interface Todo {
+  id: string;
+  text: string;
+  checked: boolean;
+}
 
 @Component({
   selector: 'app-home',
@@ -8,23 +13,26 @@ import { Observable } from 'rxjs';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  messages: any[];
-  private db: AngularFirestore;
-  model: any = {};
+  messages: Todo[];
+  model: Todo;
   isEditing: boolean = false;
   showForm: boolean;
 
-  constructor(private fireStore: AngularFirestore) {
-    this.db = this.fireStore;
+  constructor(private firestore: FirestoreService) {
     this.loadData();
+    this.model = {
+      id: '',
+      text: '',
+      checked: false
+    }
   }
 
   loadData() {
-    this.getAllDocuments("messages").subscribe((e) => {
-      let arr = [];
+    this.firestore.getAllDocuments("messages").subscribe((e) => {
+      let arr: Todo[] = [];
       if (e && e.length > 0) {
         e.forEach(item => {
-          const obj = item.payload.doc.data();
+          const obj: Todo = item.payload.doc.data() as unknown as Todo;
           obj.id = item.payload.doc.id;
           arr.push(obj)
         });
@@ -46,11 +54,11 @@ export class HomePage {
       return;
     }
     if (!this.isEditing) {
-      this.addDocument("messages", this.model).then(() => {
+      this.firestore.addDocument("messages", this.model).then(() => {
         this.loadData();//refresh view
       });
     } else {
-      this.updateDocument("messages", this.model.id, this.model).then(() => {
+      this.firestore.updateDocument("messages", this.model.id, this.model).then(() => {
         this.loadData();//refresh view
       });
     }
@@ -68,7 +76,7 @@ export class HomePage {
   }
 
   deleteMessage(id: string) {
-    this.deleteDocument("messages", id).then(() => {
+    this.firestore.deleteDocument("messages", id).then(() => {
       this.loadData();//refresh view
       this.isEditing = false;
     });
@@ -83,53 +91,6 @@ export class HomePage {
     return index; // or item.id
   }
 
-  //CRUD operation methods------------------------------------------------------------------------------------------
-
-  getAllDocuments(collection: string): Observable<any> {
-    return this.db.collection(collection).snapshotChanges();
-  }
-
-  deleteDocument(collectionName: string, docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.db
-        .collection(collectionName)
-        .doc(docID)
-        .delete()
-        .then((obj: any) => {
-          resolve(obj);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  }
-
-  addDocument(collectionName: string, dataObj: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.db.collection(collectionName).add(dataObj)
-        .then((obj: any) => {
-          resolve(obj);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  }
-
-  updateDocument(collectionName: string, docID: string, dataObj: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.db
-        .collection(collectionName)
-        .doc(docID)
-        .update(dataObj)
-        .then((obj: any) => {
-          resolve(obj);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  }
 
 
 }

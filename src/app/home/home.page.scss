@@ -132,7 +132,7 @@ ion-content {
   ion-fab-button {
     position: fixed;
     bottom: 16px;
-    left: calc(50% - 40px);
+    right: 16px;
     width: 80px !important;
     height: 80px !important;
   }
@@ -142,7 +142,7 @@ ion-content {
     height: calc(100vh - 160px);
     position: fixed;
     bottom: 50px;
-    transition: transform 0.7s cubic-bezier(0.17, 0.67, 0.75, 0.63);
+    transition: transform 0.7s ease-in-out;
 
     ion-list {
       background-color: white;
@@ -169,6 +169,13 @@ ion-content {
       width: 160px;
       margin: 8px 0px 32px 0px;
     }
+
+    .close {
+      font-size: 3rem;
+      transform: translate(10px, -30px);
+      color: rgba(251, 84, 113, 1);
+    }
+
     .placeholder {
       color: rgb(175, 176, 180);
       font-size: 1.5rem;
