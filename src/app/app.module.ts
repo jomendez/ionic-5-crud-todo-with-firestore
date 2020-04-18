@@ -10,9 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { firebaseConfig } from './config/firebase';
 
-
-//irebase.initializeApp(firebaseConfig);
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
