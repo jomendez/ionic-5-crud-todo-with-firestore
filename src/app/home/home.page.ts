@@ -78,6 +78,7 @@ export class HomePage {
   }
 
   deleteMessage(id: string) {
+    this.slidingList.closeSlidingItems();
     this.firestore.deleteDocument("messages", id).then(() => {
       this.loadData();//refresh view
       this.isEditing = false;
