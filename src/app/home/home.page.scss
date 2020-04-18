@@ -105,6 +105,13 @@ ion-content {
     font-weight: bold;
   }
   ion-list {
+    ion-icon[name="trash-outline"],
+    ion-icon[name="create-outline"] {
+      font-size: 2rem;
+    }
+    ion-icon[name="trash-outline"] {
+      color: red;
+    }
     ion-item {
       p {
         &.checked {

@@ -9,10 +9,9 @@ export class FirestoreService {
 
   constructor(private fireStore: AngularFirestore) { }
 
-  
   //CRUD operation methods------------------------------------------------------------------------------------------
 
-  getAllDocuments<T>(collection: string): Observable<DocumentChangeAction<unknown>[]> {
+  getAllDocuments(collection: string): Observable<DocumentChangeAction<unknown>[]> {
     return this.fireStore.collection(collection).snapshotChanges();
   }
 
