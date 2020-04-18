@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firestore.service';
 
 interface Todo {
@@ -17,6 +17,7 @@ export class HomePage {
   model: Todo;
   isEditing: boolean = false;
   showForm: boolean;
+  @ViewChild('slidingList', {static: false}) slidingList;
 
   constructor(private firestore: FirestoreService) {
     this.loadData();
@@ -73,6 +74,7 @@ export class HomePage {
     this.showForm = true;
     this.model = obj;
     this.isEditing = true;
+    this.slidingList.closeSlidingItems();
   }
 
   deleteMessage(id: string) {
@@ -84,6 +86,7 @@ export class HomePage {
 
 
   addItem(): void {
+    this.slidingList.closeSlidingItems();
     this.showForm = !this.showForm;
   }
 

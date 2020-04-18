@@ -7,7 +7,7 @@
 </header>
 <ion-content>
   <div class="list-header">List</div>
-  <ion-list>
+  <ion-list #slidingList>
     <ion-item-sliding *ngFor="let message of messages; trackBy: trackByFn">
       <ion-item (click)="toggleCheck(message)">
         <p [class.checked]="message.checked">{{message.text}}</p>
